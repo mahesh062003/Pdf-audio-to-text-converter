@@ -1,0 +1,7 @@
+1.have python or vs code installed in your system 
+2.dowload the necessary packages like
+pip install flask
+pip install fitz
+pip install SpeechRecognition
+3.save all the files and run app.py 
+4.display your output and try it with a file in your device

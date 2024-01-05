@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Page title -->
+    <title>PDF/AUDIO TO TEXT CONVERTER</title>
+    <!-- Include Roboto font from Google Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
+    <!-- Styling for the page -->
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            height: 100vh;
+            font-family: 'Roboto', sans-serif;
+            background: url('static/background.jpg') no-repeat center center fixed;
+            background-size: cover;
+        }
+
+        #container {
+            overflow-y: auto;
+            max-height: 80vh;
+        }
+
+        h1 {
+            font-size: 36px;
+            font-family: "Times New Roman", Times, serif;
+            color: #666;
+            margin: 20px 0;
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        h1:hover {
+            color: #3498db;
+        }
+
+        button {
+            padding: 15px 30px;
+            font-size: 18px;
+            margin: 10px 0;
+            cursor: pointer;
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        #uploadInput {
+            display: none;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 18px;
+            color: white;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 15px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        #result:hover {
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Main container -->
+    <div id="container">
+        <!-- Header with title -->
+        <h1>PDF/AUDIO TO TEXT CONVERTER</h1>
+
+        <!-- File upload form -->
+        <form id="fileForm" enctype="multipart/form-data">
+            <input type="file" id="uploadInput" accept=".pdf, .wav, .mp3" onchange="handleFileUpload()">
+        </form>
+
+        <!-- Upload and Convert buttons -->
+        <button onclick="uploadClicked()">Upload</button>
+        <button onclick="convertClicked()">Convert</button>
+
+        <!-- Display area for the result -->
+        <div id="result"></div>
+    </div>
+
+    <!-- JavaScript logic for handling file upload and conversion -->
+    <script>
+        function uploadClicked() {
+            // Trigger click on the hidden file input element
+            document.getElementById("uploadInput").click();
+        }
+
+        function handleFileUpload() {
+            // Alert when a file is uploaded
+            alert("Uploaded!!!");
+
+            // get the selected file 
+            const fileInput = document.getElementById("uploadInput");
+            const selectedFile = fileInput.files[0];
+
+            // Check if a file is selected
+            if (selectedFile) {
+                // Create a FormData object and append the selected file
+                const form = new FormData();
+                form.append("file", selectedFile);
+
+                // Send a POST request to the "/upload" endpoint with the file data
+                fetch("/upload", {
+                        method: "POST",
+                        body: form
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        // Display the result in the result element
+                        const resultElement = document.getElementById("result");
+                        resultElement.innerText = data.message;
+                        resultElement.style.display = "block";
+                    })
+                    .catch(error => {
+                        // Log error to console if there is an issue with the request
+                        console.error("Error:", error);
+                    });
+            }
+        }
+
+        function convertClicked() {
+            // Alert when the convert button is clicked
+            alert("Converting!!!");
+            // Add your convert logic here
+        }
+    </script>
+</body>
+
+</html>
